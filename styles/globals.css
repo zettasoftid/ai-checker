@@ -1,0 +1,128 @@
+html,
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+/* ContractForm.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 50px 200px 50px 200px !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.container img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  font-size: 28px;
+  color: #333;
+  margin: 10px 0;
+}
+
+h3 {
+  font-size: 18px;
+  color: #555;
+  margin: 10px 0;
+}
+
+form {
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+h5 {
+  font-size: 14px;
+  color: #888;
+  margin-top: 5px;
+}
+
+p {
+  font-size: 16px;
+  color: #333;
+  margin-top: 10px;
+}
+
+ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  text-align: left;
+  list-style: none; /* Menetapkan list-style menjadi none */
+}
+
+li p {
+  margin: 5px 0;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+/* Miringkan teks yang berasal dari desc_question */
+.italic-text {
+  font-style: italic;
+}
+
+/* Add more styling as needed */
