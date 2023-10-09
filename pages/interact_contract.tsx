@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
-import Logo from "../public/traix.png";
 
 const questions = [
   "Does the Contract have a hidden owner?",
@@ -44,9 +43,39 @@ const desc_question = [
   "Contracts heavily reliant on owner-exclusive functions centralize control and undermine decentralization. Such designs limit user participation and expose the contract to owner-driven decisions that may not align with the broader community's interests. Contracts should prioritize decentralized governance and transparency.",
 ];
 
+const scan_summary = [
+  {
+    question: "Does the Contract have a hidden owner?",
+    description:
+      "A contract with a concealed owner can be highly suspicious and pose significant risks...",
+  },
+  {
+    question: "Does the contract have admin privileges?",
+    description:
+      "Contracts equipped with extensive admin privileges can centralize power...",
+  },
+  {
+    question: "Does the Contract look like a honeypot?",
+    description:
+      "Honeypot contracts are malicious by design, aiming to deceive and defraud users...",
+  },
+];
+
+interface Match {
+  basic_info: string;
+  matches: string;
+}
+
+interface ApiResponse {
+  matches: Match[];
+}
+
 function ContractForm() {
-  const [contractAddress, setContractAddress] = useState("");
+  const [data, setData] = useState<any>(null);
   const [matches, setMatches] = useState([]);
+  const [responseData, setResponseData] = useState(null);
+
+  const [contractAddress, setContractAddress] = useState("");
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -55,14 +84,19 @@ function ContractForm() {
 
     try {
       setIsFetching(true);
-      const response = await fetch("http://Zettasoft.pythonanywhere.com/api/contract", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ contract_address: contractAddress }),
-      });
+      const response = await fetch(
+        "https://zettahosted.pythonanywhere.com/api/contract",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ contract_address: contractAddress }),
+        }
+      );
       if (response.ok) {
+        const responseData = await response.json();
+        setResponseData(responseData);
         fetchData();
       } else {
         console.log("Failed to fetch contract_name");
@@ -81,9 +115,10 @@ function ContractForm() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://Zettasoft.pythonanywhere.com/api/contract/matches"
+        "https://zettahosted.pythonanywhere.com/api/contract/matches"
       );
       const data = response.data;
+      console.log(data, "coba data dsini");
       setMatches(data.matches);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -96,6 +131,9 @@ function ContractForm() {
 
   return (
     <div>
+      {/* <head>
+        <title>TRAIX</title>
+      </head> */}
       {/* Navigasi */}
       <div className="navbar">
         <div className="content-navbar">
@@ -108,7 +146,10 @@ function ContractForm() {
       {/* Header */}
       <div className="header">
         <div className="content-header">
-          <h2 className="judul bold-text"> Personal Contracts Auditor </h2>
+          <h2 className="judul-header bold-text">
+            {" "}
+            Personal Contracts Auditor{" "}
+          </h2>
           <h3 className="text-header">
             {" "}
             "Offers a quick, informative smart contract scan to enhance your
@@ -116,12 +157,12 @@ function ContractForm() {
           </h3>
           <form onSubmit={handleSubmit}>
             <div className="header-button">
-              <button className="button-connect jarak-button" type="submit">
+              <button className="button-header jarak-button" type="submit">
                 Quick Scan
               </button>
               <input
                 type="text"
-                placeholder="Contract Address"
+                placeholder="Scan here.."
                 value={contractAddress}
                 onChange={handleInputChange}
                 className="input-scan"
@@ -141,11 +182,11 @@ function ContractForm() {
       {/* Support By */}
       <div className="support">
         <div className="support-by">
-          <h1>Support By</h1>
+          <h1 className="support-header">Support By</h1>
           <div className="sponsor">
-            <h1>gambar 1</h1>
-            <h1>gambar 2</h1>
-            <h1>gambar 3</h1>
+            <img alt="logo1" src="/assets/image26.png" className="logo" />
+            <img alt="logo2" src="/assets/image28.png" className="logo" />
+            <img alt="logo3" src="/assets/image29.png" className="logo" />
           </div>
           <p>
             Disclaimer: The output should not be taken as an indication or
@@ -159,50 +200,29 @@ function ContractForm() {
         {/* Scan Summary */}
         <div className="scan">
           <h2>Scan Summary</h2>
-          <div>
-
-          <div className="summary">
-            <div className="scanner">
-              <p>testingggg</p>
-              <p>testingg</p>
-            </div>
-            <div className="scanner">
-              <p>testingggg</p>
-              <p>testingg</p>
-            </div>
-          </div>
-          <div className="summary">
-            <div className="scanner">
-              <p>testingggg</p>
-              <p>testingg</p>
-            </div>
-            <div className="scanner">
-              <p>testingggg</p>
-              <p>testingg</p>
-            </div>
-          </div>
-          </div>
-          <ul>
-            {matches ? (
-              matches.map((match, index) => (
-                <li key={index}>
-                  {matches.length > 1 && (
-                    <p className="bold-text">{questions[index]}</p>
+          <div className="separator">
+            <div className="summary">
+              <table>
+                <tbody>
+                  {responseData ? (
+                    questions.map((item, index) => (
+                      <tr key={index}>
+                        <td className="scanner-question">
+                          <span className="nomor">
+                            {(index + 1).toString().padStart(2, "0")}
+                          </span>
+                          {item}
+                        </td>
+                        <td className="scanner">{desc_question[index]}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <p></p>
                   )}
-                  <br></br>
-                  <p>{match}</p>
-                  <br></br>
-                  {matches.length > 1 && (
-                    <p className="italic-text">{desc_question[index]}</p>
-                  )}
-                </li>
-              ))
-            ) : (
-              <li>
-                <p>Waiting for checking...</p>
-              </li>
-            )}
-          </ul>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
         {/* Scan Summary */}
       </div>
